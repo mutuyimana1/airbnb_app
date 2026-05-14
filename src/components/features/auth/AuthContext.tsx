@@ -71,37 +71,57 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     init();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await axiosInstance.post("/auth/login", {
-        email,
-        password,
-      });
-      const token = response.data.token;
-      saveToken(token);
-      setIsAuthenticated(true);
-      return await fetchUserProfile();
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error || new Error("Login failed");
-    }
-  };
+   const login = async (email: string, password: string) => {
+     try {
+       const response = await axiosInstance.post("/auth/login", {
+         email,
+         password,
+       });
+       const token = response.data.token;
+       if (!token) {
+         throw new Error("No authentication token received from server");
+       }
+       saveToken(token);
+       setIsAuthenticated(true);
+       return await fetchUserProfile();
+     } catch (error) {
+       console.error("Login failed:", error);
+       throw error || new Error("Login failed");
+     }
+   };
 
-  const register = async (data: any) => {
-    try {
-      const response = await axiosInstance.post("/auth/register", data);
-      const token = response.data.token;
-      saveToken(token);
-      setIsAuthenticated(true);
-      const profile = await fetchUserProfile();
-      navigate(getDefaultRedirect(profile.role), { replace: true });
-    } catch (error) {
-      console.error("Registration failed:", error);
-      throw error;
-    }
-  };
+   const register = async (data: any) => {
+     try {
+       const response = await axiosInstance.post("/auth/register", data);
+       const token = response.data.token;
+      //  if (!token) {
+      //    throw new Error("No authentication token received from server");
+      //  }
+       saveToken(token);
+       setIsAuthenticated(true);
 
-  const logout = () => {
+       // Build user from response data or fallback to form data
+       let userData = response.data.user || response.data;
+       if (!userData || !userData.role) {
+         userData = {
+           id: "",
+           name: data.name,
+           email: data.email,
+           phone: data.phone,
+           role: data.role,
+         };
+       }
+       setUser(userData as UserProfile);
+
+       // Navigate using provided role
+       navigate("/login");
+     } catch (error) {
+       console.error("Registration failed:", error);
+       throw error;
+     }
+    };
+
+   const logout = () => {
     clearToken();
     setIsAuthenticated(false);
     setUser(null);

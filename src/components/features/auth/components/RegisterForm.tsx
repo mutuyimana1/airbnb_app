@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { toast } from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -99,8 +100,33 @@ export const RegisterForm: React.FC = () => {
         password: formData.password,
         role: formData.role,
       });
-    } catch (error) {
-      console.error("Registration failed:", error);
+     } catch (error: any) {
+       console.error("Registration failed:", error);
+
+       let errorMessage = "Registration failed. Please try again.";
+       const errorData = error?.response?.data;
+
+       if (errorData) {
+         if (typeof errorData === 'string') {
+           errorMessage = errorData;
+         } else if (typeof errorData === 'object' && errorData !== null) {
+           const msg = errorData.message || errorData.error || errorData.err || errorData.detail;
+           if (msg) {
+             errorMessage = msg;
+           } else if (errorData.errors) {
+             const fieldErrors = Object.values(errorData.errors);
+             errorMessage = Array.isArray(fieldErrors)
+               ? fieldErrors.join(', ')
+               : JSON.stringify(fieldErrors);
+           } else {
+             errorMessage = JSON.stringify(errorData);
+           }
+         }
+       } else {
+         errorMessage = error?.message || errorMessage;
+       }
+
+       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

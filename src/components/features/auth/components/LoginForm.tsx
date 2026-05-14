@@ -23,33 +23,54 @@ export const LoginForm: React.FC = () => {
   const getRedirectPath = (role?: string) =>
     role?.toUpperCase() === "GUEST" ? "/listings" : "/dashboard";
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+   const handleSubmit = async (e: React.FormEvent) => {
+     e.preventDefault();
+     e.stopPropagation();
 
-    if (loading) return;
+     if (loading) return;
 
-    setLoading(true);
+     setLoading(true);
 
-    try {
-      const profile = await login(email, password);
+     try {
+       const profile = await login(email, password);
 
-      toast.success("Login successful!");
+       toast.success("Login successful!");
 
-      navigate(getRedirectPath(profile.role));
-    } catch (error: any) {
-      console.error("Login error:", error);
+       navigate(getRedirectPath(profile.role));
+      } catch (error: any) {
+        console.error("Login error:", error);
 
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Login failed. Please try again.";
+        let errorMessage = "Login failed. Please try again.";
+        const errorData = error?.response?.data;
 
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
+        if (errorData) {
+          if (typeof errorData === 'string') {
+            errorMessage = errorData;
+          } else if (typeof errorData === 'object' && errorData !== null) {
+            // Try common message fields
+            const msg = errorData.message || errorData.error || errorData.err || errorData.detail;
+            if (msg) {
+              errorMessage = msg;
+            } else if (errorData.errors) {
+              // Field-specific validation errors
+              const fieldErrors = Object.values(errorData.errors);
+              errorMessage = Array.isArray(fieldErrors)
+                ? fieldErrors.join(', ')
+                : JSON.stringify(fieldErrors);
+            } else {
+              // Show the raw error object as fallback
+              errorMessage = JSON.stringify(errorData);
+            }
+          }
+        } else {
+          errorMessage = error?.message || errorMessage;
+        }
+
+        toast.error(errorMessage);
+      } finally {
+       setLoading(false);
+     }
+   };
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center py-10 px-20">

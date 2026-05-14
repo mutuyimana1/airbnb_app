@@ -74,8 +74,8 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 className="flex items-center gap-3 pl-3 border-l border-gray-200"
               >
                 <div className="hidden sm:block text-right">
-                  <p className="text-sm font-medium text-gray-900">{userName}</p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
+                  <p className="text-sm font-medium text-gray-900 capitalize">{userName}</p>
+                  <p className="text-xs text-gray-500">{user?.role}</p>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white font-semibold">
                   {userName.charAt(0)}
