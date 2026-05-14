@@ -6,6 +6,8 @@ import HomeLayout from "./components/layout/HomeLayout";
 import ProtectedRoute from "./components/shared/ProtectedRoute";
 import { Spinner } from "@/components/ui/spinner"
 import Dashboard from "./pages/Dashboard";
+import { DashboardListings } from "./components/dashboard/pages/DashboardListings";
+import { DashboardBookings } from "./components/dashboard/pages/DashboardBookings";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const Listings = lazy(() => import("./pages/Listings"));
@@ -19,9 +21,10 @@ const SignupPage = lazy(
 const DashboardLayout = lazy(
   () => import("./components/layout/DashboardLayout"),
 );
-const DashboardHome = lazy(() => import("./pages/DashboardHome"));
+// const Dashboard = lazy(() => import("./pages/Dashboard"));
 const AddListing = lazy(() => import("./pages/AddListing"));
 const BookingsPage = lazy(() => import("./features/bookings/pages/BookingsPage"));
+const SavedList = lazy(() => import("./pages/SavedList"));
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
 
 // Configure NProgress
@@ -42,7 +45,6 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/dash" element={<Dashboard />} />
 
           <Route element={<HomeLayout />}>
             <Route path="/" element={<LandingPage />} />
@@ -59,27 +61,39 @@ export default function App() {
           />
           </Route>
 
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<DashboardHome />} />
-            <Route
-              path="settings"
+<Route
+              path="/dashboard"
               element={
-                <div className="p-10 text-slate-900">
-                  <h2 className="text-2xl font-bold">Settings</h2>
-                  <p className="mt-4 text-sm text-slate-500">
-                    Manage account preferences and notifications here.
-                  </p>
-                </div>
+                <ProtectedRoute forbiddenRoles={["GUEST"]}>
+                  <DashboardLayout />
+                </ProtectedRoute>
               }
-            />
-          </Route>
+           >
+             <Route index element={<Dashboard/>} />
+             <Route
+               path="listings"
+               element={
+                 <DashboardListings />
+               }
+             />
+             <Route
+               path="bookings"
+               element={
+                 <DashboardBookings />
+               }
+             />
+             <Route
+               path="settings"
+               element={
+                 <div className="p-10 text-slate-900">
+                   <h2 className="text-2xl font-bold">Settings</h2>
+                   <p className="mt-4 text-sm text-slate-500">
+                     Manage account preferences and notifications here.
+                   </p>
+                 </div>
+               }
+             />
+           </Route>
 
           <Route
             path="/add-listing"
@@ -90,7 +104,8 @@ export default function App() {
             }
           />
 
-          <Route path="*" element={<NotFoundPage />} />
+<Route path="/saved" element={<SavedList />} />
+           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </>

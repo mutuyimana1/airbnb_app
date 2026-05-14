@@ -1,8 +1,7 @@
 export const navItems = [
   { name: "Home", hasDropdown: false ,page:"/"},
   { name: "Listing", hasDropdown: false ,page:"/listings"},
-  { name: "Bookings", hasDropdown: false ,page:"/bookings"},
-  { name: "Dashboard", hasDropdown: false ,page:"/dashboard"},
+  { name: "Bookings", hasDropdown: false ,page:"/bookings",roles:["GUEST"]},
 ];
 export const places = [
   {

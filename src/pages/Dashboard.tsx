@@ -4,41 +4,63 @@ import DashboardHeader from "../components/dashboard/DashboardHeader";
 import StatsCards from "../components/dashboard/StatsCards";
 import AnalyticsChart from "../components/dashboard/AnalyticsChart";
 import DataTable from "../components/dashboard/DataTable";
-
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/components/features/auth/hooks/useAuth";
+import axiosInstance from "@/lib/axios";
+import type { Booking, Listing } from "@/types";
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { user } = useAuth();
+  const userRole = user?.role?.toUpperCase() === "HOST" ? "HOST" : "GUEST";
+  const userName = user?.name || "Traveler";
+  const [isAddListingOpen, setIsAddListingOpen] = useState(false);
+
+  const listingsQuery = useQuery<Listing[]>({
+    queryKey: ["dashboard-listings"],
+    queryFn: async () => {
+      const response = await axiosInstance.get<Listing[]>("/listings");
+      return response.data;
+    },
+    enabled: !!user,
+  });
+
+  const bookingsQuery = useQuery<Booking[]>({
+    queryKey: ["dashboard-bookings", userRole],
+    queryFn: async () => {
+      const endpoint = userRole === "HOST" ? "/bookings" : "/bookings";
+
+      try {
+        const response = await axiosInstance.get<Booking[]>(endpoint);
+        return response.data;
+      } catch (error) {
+        if (userRole === "HOST") {
+          const response = await axiosInstance.get<Booking[]>("/bookings");
+          return response.data.filter(
+            (booking) => booking.listing?.hostId === user?.id,
+          );
+        }
+        throw error;
+      }
+    },
+    enabled: !!user,
+  });
+
+  const isLoading = listingsQuery.isLoading || bookingsQuery.isLoading;
+  const listings = listingsQuery.data ?? [];
+  const bookings = bookingsQuery.data ?? [];
+  const hostListings = listings.filter(
+    (listing: Listing) => listing.hostId === user?.id,
+  );
+
+  // Removed sectionTitle as it's not used
+  const bookingLabel =
+    userRole === "HOST" ? "Booking requests" : "Your bookings";
+  const listingLabel = userRole === "HOST" ? "Your listings" : "Explore stays";
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Sidebar */}
-      <Sidebar
-        collapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
 
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        >
-          <div
-            className="w-64 bg-white h-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Sidebar collapsed={false} onToggle={() => {}} />
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div
-        className={`transition-all duration-300 ${
-          sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
-        }`}
-      >
-        <DashboardHeader onMenuClick={() => setSidebarOpen(true)} />
 
         <main className="p-4 lg:p-8">
           {/* Stats Cards */}
@@ -56,7 +78,6 @@ export default function Dashboard() {
             <DataTable />
           </div>
         </main>
-      </div>
     </div>
   );
 }

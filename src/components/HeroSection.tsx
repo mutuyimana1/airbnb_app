@@ -112,73 +112,15 @@ export function HeroSection() {
           You&apos;ll get comprehensive results based on the provided location.
         </p>
 
-        {/* Search Bar */}
-        <div className="w-full max-w-[900px] relative">
-          <div className="bg-white rounded-[50px] shadow-2xl p-3 flex flex-col sm:flex-row gap-2 sm:gap-0 items-stretch sm:items-center">
-            {/* Category Button */}
-            <div className="relative shrink-0">
-              <button
-                onClick={() => setShowDropdown(!showDropdown)}
-                className="flex items-center gap-2 bg-[#f84525] text-white px-6 py-4 rounded-[32px] text-sm font-medium whitespace-nowrap hover:bg-[#e03e1f] transition-colors min-w-[160px] justify-between"
-                style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
-              >
-                <span>{selectedCategory}</span>
-                <ChevronDown size={14} />
-              </button>
-
-              {showDropdown && (
-                <div className="absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-xl py-2 z-50 min-w-[200px] border border-gray-100">
-                  {searchCategories.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => {
-                        setSelectedCategory(cat);
-                        setShowDropdown(false);
-                      }}
-                      className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#f84525]/10 hover:text-[#f84525] transition-colors"
-                      style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Divider */}
-            <div className="hidden sm:block w-px h-10 bg-gray-200 mx-2 shrink-0" />
-
-            {/* Location field */}
-            <div className="flex items-center gap-3 flex-1 px-4">
-              <MapPin size={20} className="text-gray-400 shrink-0" />
-              <input
-                type="text"
-                placeholder="What are you looking for?"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="flex-1 outline-none text-gray-700 text-sm bg-transparent placeholder-gray-400"
-                style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
-              />
-            </div>
-
-            {/* Search Button */}
-            <button className="bg-[#f84525] hover:bg-[#e03e1f] text-white p-4 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#f84525]/30 sm:ml-2 shrink-0">
-              <Search size={20} />
-            </button>
-          </div>
-        </div>
-
         {/* Quick tags */}
         <div className="flex flex-wrap justify-center gap-3 mt-8">
-          {["Hotels", "Restaurants", "Landmarks", "Shopping"].map((tag) => (
-            <a
-              key={tag}
-              href="#"
+          {["Apartments", "Villa", "House", "Cabin"].map((tag) => (
+            <span
               className="text-white/70 hover:text-white text-xs border border-white/20 px-4 py-1.5 rounded-full hover:border-white/50 transition-colors backdrop-blur-sm"
               style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
             >
               {tag}
-            </a>
+            </span>
           ))}
         </div>
       </div>

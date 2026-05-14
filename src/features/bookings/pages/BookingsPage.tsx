@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBookings } from "../hooks/useBookings";
 import { BookingCard } from "../components/BookingsGrid";
-import { BookingsTable } from "../components/BookingsTable";
 import { Button } from "@/components/ui/button";
+import { Grid2X2, List } from "lucide-react";
+import BookingTable from "@/components/dashboard/components/BookingTable";
 
 type ViewMode = "grid" | "table";
 
@@ -38,47 +39,40 @@ const BookingsPage = () => {
   return (
     <div className="min-h-screen bg-white mt-20">
       {/* Header */}
-      <div className="border-b border-gray-100">
+      <div>
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900">My Bookings</h1>
               <p className="mt-2 text-gray-500">
                 {bookings.length === 0
                   ? "You haven't made any bookings yet."
-                  : `You have ${bookings.length} booking${bookings.length !== 1 ? "s" : ""}.`}
+                  : ""}
               </p>
             </div>
 
-            {/* View Toggle */}
-            <div className="flex items-center gap-2 bg-gray-50 p-1 rounded-xl">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                  viewMode === "grid"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-              >
-                Grid
-              </button>
-              <button
-                onClick={() => setViewMode("table")}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                  viewMode === "table"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-              >
-                Table
-              </button>
-            </div>
           </div>
         </div>
+        
+            {/* View Toggle */}
+             <div className="flex items-center right-0 mb-1 gap-4 justify-end mr-4">
+              <button className={`p-2 flex gap-2 rounded`}>
+                <List
+                  onClick={() => setViewMode("table")}
+                  size={35}
+                  className={`hover:bg-gray-100 p-2 rounded-md ${viewMode === "grid" ? "text-primary" : "bg-orange-50 text-orange-500"}`}
+                />
+
+                <Grid2X2
+                  onClick={() => setViewMode("grid")}
+                  size={35}
+                  className={`hover:bg-gray-100 p-2 rounded-md ${viewMode === "table" ? "text-primary" : "bg-orange-50 text-orange-500"}`}
+                />
+              </button>
+            </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="w-full mx-auto px-20">
         {bookings.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="bg-gray-50 rounded-full p-6 mb-6">
@@ -98,13 +92,13 @@ const BookingsPage = () => {
             </Button>
           </div>
         ) : viewMode === "grid" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {bookings.map((booking) => (
               <BookingCard booking={booking} key={booking.id} />
             ))}
           </div>
         ) : (
-          <BookingsTable bookings={bookings} />
+          <BookingTable bookings={bookings} />
         )}
       </div>
     </div>

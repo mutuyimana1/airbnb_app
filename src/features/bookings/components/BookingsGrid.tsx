@@ -27,12 +27,12 @@ export const BookingCard = ({ booking }: BookingCardProps) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 space-y-4 hover:shadow-xl transition-shadow">
+    <div className="bg-white rounded-2xl border-2 border-gray-100 p-6 space-y-4 hover:shadow-xl transition-shadow">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <h3 className="font-bold text-lg text-gray-900 line-clamp-1">
-            {booking.listing?.title || "Property"}
+            {booking.listing?.title || "N/A"}
           </h3>
           <div className="flex items-center gap-1 text-sm text-gray-500">
             <MapPin size={14} />
@@ -48,14 +48,14 @@ export const BookingCard = ({ booking }: BookingCardProps) => {
       {/* Dates */}
       <div className="flex items-center gap-4 text-sm text-gray-600">
         <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-gray-400" />
+          {/* <Calendar size={16} className="text-gray-400" /> */}
           <div>
             <p className="text-xs text-gray-400">Check-in</p>
             <p className="font-medium">{formatDate(booking.checkIn)}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-gray-400" />
+          {/* <Calendar size={16} className="text-gray-400" /> */}
           <div>
             <p className="text-xs text-gray-400">Check-out</p>
             <p className="font-medium">{formatDate(booking.checkOut)}</p>

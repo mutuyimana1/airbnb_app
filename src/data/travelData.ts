@@ -47,23 +47,23 @@ export const processSteps: ProcessStep[] = [
   {
     id: 1,
     number: "1",
-    title: "Input your location to start looking for landmarks.",
+    title: "Create your account .",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pharetra vitae quam integer semper.",
+      "You should have an account to book a place.",
   },
   {
     id: 2,
     number: "2",
-    title: "Make an appointment at the place you want to visit.",
+    title: "Make an appointment.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pharetra vitae quam integer.",
+      "Follow booking proccess and we confirm your desired place to visit.",
   },
   {
     id: 3,
     number: "3",
     title: "Visit the place and enjoy the experience.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pharetra vitae quam integer aenean.",
+      "Enjoy your visit and share your experience with others by leaving a review.",
   },
 ];
 
@@ -125,57 +125,6 @@ export interface Listing {
   price: string;
 }
 
-export const listings: Listing[] = [
-  {
-    id: 1,
-    image: listing01,
-    title: "Chuijhal Hotel And Restaurant",
-    rating: 4.5,
-    reviewCount: "2,391 reviews",
-    description: "Amet minim mollit non deserunt ullamco est sit aliqua dolor.",
-    price: "$120/night",
-  },
-  {
-    id: 2,
-    image: listing02,
-    title: "Luxury Beach Resort & Spa",
-    rating: 4.8,
-    reviewCount: "1,856 reviews",
-    description:
-      "Experience the finest luxury accommodations with world-class amenities.",
-    price: "$250/night",
-  },
-  {
-    id: 3,
-    image: listing03,
-    title: "Mountain View Lodge",
-    rating: 4.3,
-    reviewCount: "987 reviews",
-    description:
-      "Breathtaking mountain views combined with cozy, comfortable stays.",
-    price: "$180/night",
-  },
-  {
-    id: 4,
-    image: listing04,
-    title: "Downtown Business Hotel",
-    rating: 4.6,
-    reviewCount: "3,201 reviews",
-    description:
-      "Perfectly located in the city center with modern business facilities.",
-    price: "$95/night",
-  },
-  {
-    id: 5,
-    image: listing05,
-    title: "Heritage Boutique Inn",
-    rating: 4.7,
-    reviewCount: "1,124 reviews",
-    description:
-      "A charming boutique hotel blending historic architecture with modern comfort.",
-    price: "$145/night",
-  },
-];
 
 // Testimonials
 export interface Testimonial {
@@ -266,17 +215,14 @@ export const articles: Article[] = [
 // Footer links
 export const footerLinks = {
   quickLinks: [
-    { label: "About Us", href: "#" },
-    { label: "Listings", href: "#" },
-    { label: "Blog", href: "#" },
-    { label: "Contact", href: "#" },
-    { label: "Privacy Policy", href: "#" },
+    { label: "Listings", href: "listings" },
+    { label: "Home", href: "/" },
+    { label: "dashboard", href: "/dashboard" },
   ],
   categories: [
-    { label: "Hotels", href: "#" },
-    { label: "Restaurants", href: "#" },
-    { label: "Shopping", href: "#" },
-    { label: "Entertainment", href: "#" },
-    { label: "Travel Guides", href: "#" },
+    { label: "Apartments", href: "#" },
+    { label: "Vila", href: "#" },
+    { label: "House", href: "#" },
+    { label: "Cabin", href: "#" },
   ],
 };

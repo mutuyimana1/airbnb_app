@@ -190,6 +190,12 @@ export const LoginForm: React.FC = () => {
           >
             Sign up
           </Link>
+          or  <Link
+            to="/"
+            className="text-[#FF5A5F] cursor-pointer hover:underline"
+          >
+            Go Home
+          </Link>
         </p>
           </div>
         </div>

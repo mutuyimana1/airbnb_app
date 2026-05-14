@@ -53,15 +53,6 @@ export default function ExactListingPage() {
 
   const tertiaryImage = photoUrls[2] || primaryImage;
 
-  const publishedDate = useMemo(
-    () =>
-      new Date().toLocaleDateString(undefined, {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      }),
-    [],
-  );
 
   const rawAmenities =
     listing?.amenities?.length && listing.amenities.length > 0
@@ -128,10 +119,6 @@ export default function ExactListingPage() {
             <button className="flex items-center gap-2 text-[15px] text-gray-700 font-medium">
               Save this listing <Heart size={16} />
             </button>
-
-            <p className="text-sm text-gray-500 mt-1">
-              people bookmarked this place 46
-            </p>
           </div>
 
           {/* RIGHT */}
@@ -174,18 +161,12 @@ export default function ExactListingPage() {
             </div>
 
             <div className="flex flex-wrap lg:justify-end items-center gap-3 mt-3 text-sm text-gray-500">
-              <span>Full time</span>
+            
 
               <span>
                 <MapPin size={14} className="inline mr-1" />
                 {listing.location || "San Francisco 1123"}
               </span>
-
-              <span>/</span>
-
-              <span>Posted 7 hours ago</span>
-
-              <span>/</span>
             </div>
           </div>
         </div>
@@ -226,11 +207,6 @@ export default function ExactListingPage() {
           </div>
         </div>
 
-        {/* PUBLISHED */}
-        <div className="mt-4 text-sm text-gray-500">
-          {publishedDate} : <span className="font-semibold">Published</span>
-        </div>
-
         {/* CONTENT */}
         <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-16 mt-16">
           {/* LEFT */}
@@ -238,7 +214,7 @@ export default function ExactListingPage() {
               <BookingForm listingId={listingId!} />
 
             {/* OPENING HOURS */}
-            <div className="border border-gray-100 rounded-[28px] p-8 shadow-sm">
+            {/* <div className="border border-gray-100 rounded-[28px] p-8 shadow-sm">
               <div className="flex items-center justify-between mb-8">
                 <h3 className="text-3xl font-bold text-gray-900">
                   Opening{" "}
@@ -283,7 +259,7 @@ export default function ExactListingPage() {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* RIGHT */}

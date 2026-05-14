@@ -1,20 +1,23 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Search, Heart, User, LogOut } from "lucide-react";
 import { useAuth } from "@/components/features/auth/hooks/useAuth";
-import { logoWhite } from "../assets/images";
+import { useFavorites } from "@/features/listings/hooks/useFavorites";
 import { navItems } from "@/data/items";
 
 export function Navbar() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+   const location = useLocation();
+   const navigate = useNavigate();
+   const { isAuthenticated, logout, user } = useAuth();
+   const { count: savedCount } = useFavorites();
+   const [mobileOpen, setMobileOpen] = useState(false);
+   const [scrolled, setScrolled] = useState(false);
+   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleLogout = () => {
     logout();
     navigate("/");
+    setAnchorEl(null);
   };
 
   const handleAddListing = () => {
@@ -50,37 +53,57 @@ export function Navbar() {
       <div className="max-w-[1320px] mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-[80px]">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 shrink-0">
-            <img
-              src={logoWhite}
-              alt="ListOn"
-              className="h-8 w-auto object-contain"
-            />
-          </a>
-
-          {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navItems.map((link) => (
-              <a
-                key={link.name}
-                href={link.page}
-                className="text-white/90 hover:text-white text-sm font-medium transition-colors duration-200 relative group"
-                style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
+          <NavLink to="/" className="flex items-center gap-2 shrink-0">
+            <div className="h-16 flex items-center justify-between">
+              <span
+                className={`transition-all duration-300'h-4 w-4 text-2xl text-white`}
               >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f84525] transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
-          </div>
+                Air<span className="font-bold text-orange-500">bnb</span>
+              </span>
+            </div>
+          </NavLink>
+
+{/* Desktop Nav Links */}
+           <div className="hidden lg:flex items-center gap-8">
+
+            {navItems.map((link)=>{
+              return(
+                // (link.roles && link.roles.includes(userRole?? "")) && 
+                <NavLink
+                 key={link.name}
+                 to={link.page}
+                 end
+                 className={({ isActive }) => `
+                     hover:text-white text-sm font-medium
+                    transition-colors duration-200 relative group
+                    ${isActive ? "text-orange-400" : "text-white/90"}
+                  `}
+                 style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
+               >
+                 {link.name}
+                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f84525] transition-all duration-300 group-hover:w-full" />
+               </NavLink>
+               )
+            }
+            )}
+           </div>
 
           {/* Right Actions */}
           <div className="hidden lg:flex items-center gap-3">
             <button className="text-white/80 hover:text-white transition-colors p-2">
               <Search size={18} />
             </button>
-            <button className="text-white/80 hover:text-white transition-colors p-2">
-              <Heart size={18} />
-            </button>
+<button
+               onClick={() => navigate("/saved")}
+               className="text-white/80 hover:text-white transition-colors p-2 relative"
+             >
+               <Heart size={18} />
+               {savedCount > 0 && (
+                 <span className="absolute -top-1 -right-1 bg-[#f84525] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                   {savedCount}
+                 </span>
+               )}
+             </button>
             {isAuthenticated ? (
               <button
                 onClick={handleLogout}
@@ -129,17 +152,26 @@ export function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden bg-[#191e25] border-t border-white/10">
           <div className="px-4 py-4 flex flex-col gap-1">
-            {navItems.map((link) => (
-              <a
-                key={link.name}
-                href={link.page}
-                className="text-white/90 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium"
-                style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.name}
-              </a>
-            ))}
+ {navItems.map((link)=>{
+              return(
+                // (link.roles && link.roles.includes(userRole?? "")) && 
+                <NavLink
+                 key={link.name}
+                 to={link.page}
+                 end
+                 className={({ isActive }) => `
+                     hover:text-white text-sm font-medium
+                    transition-colors duration-200 relative group
+                    ${isActive ? "text-orange-400" : "text-white/90"}
+                  `}
+                 style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
+               >
+                 {link.name}
+                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f84525] transition-all duration-300 group-hover:w-full" />
+               </NavLink>
+               )
+            }
+            )}
             <div className="pt-3 border-t border-white/10 flex gap-3">
               {isAuthenticated ? (
                 <button
@@ -150,14 +182,14 @@ export function Navbar() {
                   Logout
                 </button>
               ) : (
-                <Link
+                <NavLink
                   to="/login"
                   className="flex-1 text-center border border-white/30 text-white py-2.5 rounded-full text-sm"
                   onClick={() => setMobileOpen(false)}
                   style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
                 >
                   Sign In
-                </Link>
+                </NavLink>
               )}
               <button
                 onClick={() => {

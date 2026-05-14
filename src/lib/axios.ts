@@ -28,10 +28,17 @@ axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // Clear token from localStorage
-      localStorage.removeItem('auth_token');
-      // Redirect to login
-      window.location.href = '/login';
+      // Check if this is a login/register request - don't redirect, let the component handle it
+      const requestUrl = error.config?.url || '';
+      const isAuthRequest = requestUrl.includes('/auth/login') || requestUrl.includes('/auth/register');
+
+      if (!isAuthRequest) {
+        // Clear token from localStorage
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('token');
+        // Redirect to login
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

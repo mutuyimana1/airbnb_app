@@ -1,55 +1,46 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/features/auth/hooks/useAuth";
+import { useState } from "react";
+import Sidebar from "../dashboard/Sidebar";
+import DashboardHeader from "../dashboard/DashboardHeader";
 
 const DashboardLayout = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
-
+ const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
   return (
-    <div className="min-h-screen flex bg-slate-50">
-      <aside className="w-72 bg-slate-950 text-white p-6">
-        <h2 className="text-2xl font-bold mb-8">Dashboard</h2>
-        <div className="mb-10">
-          <p className="text-sm text-slate-400">Signed in as</p>
-          <p className="mt-2 text-lg font-semibold text-white">
-            {user?.name || "Guest User"}
-          </p>
-          <p className="text-sm text-slate-400">
-            {user?.role ? user.role.toLowerCase() : "visitor"}
-          </p>
-        </div>
-        <nav className="flex flex-col gap-4 text-sm font-medium">
-          <Link to="/dashboard" className="hover:text-cyan-300 transition">
-            Overview
-          </Link>
-          <Link
-            to="/dashboard/settings"
-            className="hover:text-cyan-300 transition"
-          >
-            Settings
-          </Link>
-        </nav>
-      </aside>
-
-      <div className="flex-1">
-        <header className="bg-white shadow-sm p-4">
-          <div className="flex items-center justify-between gap-4">
-            <span className="font-semibold text-slate-700">
-              {user ? `Hello, ${user.name}` : "Hello"}
-            </span>
-            <button
-              onClick={handleLogout}
-              className="rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600"
+    <div className="min-h-screen flex bg-slate-50-50 w-full">
+    
+          <Sidebar
+            collapsed={sidebarCollapsed}
+            onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+          />
+    
+          {/* Mobile Sidebar Overlay */}
+          {sidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
             >
-              Logout
-            </button>
-          </div>
-        </header>
+              <div
+                className="w-64 bg-white h-full"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Sidebar collapsed={false} onToggle={() => {}} />
+              </div>
+            </div>
+          )}
+
+      <div className={`transition-all duration-300 w-full ${
+          sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
+        }`}>
+       <DashboardHeader onMenuClick={() => setSidebarOpen(true)} />
 
         <main className="p-8">
           <Outlet />

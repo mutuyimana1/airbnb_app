@@ -1,36 +1,49 @@
 import { useMemo, useState } from "react";
-import { ChevronDown, RotateCcw, LayoutGrid, List } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+  ChevronDown,
+  List,
+  Grid2X2,
+  Search,
+  MapPin,
+} from "lucide-react";
+
 import { Slider } from "@/components/ui/slider";
+
 import { useStore } from "@/store/StoreContext";
 import { useListings } from "@/features/listings/hooks/useListings";
 import { useFavorites } from "@/features/listings/hooks/useFavorites";
-import Spinner from "@/shared/components/Spinner";
-import ListingCard from "@/components/ListingCard";
 
+import Spinner from "@/shared/components/Spinner";
+import ListingTable from "@/components/dashboard/components/ListingTable";
+import ListingsCard from "@/components/ListingsCard";
+const searchCategories = [
+  "All Categories",
+  "Apartments",
+  "Villa",
+  "House",
+  "Cabin",
+];
 const categories = [
-  { name: "Eat & Drink", count: 62 },
-  { name: "Coaching", count: 31 },
+  { name: "House", count: 31 },
   { name: "Apartments", count: 20 },
-  { name: "Services", count: 43 },
-  { name: "Classifieds", count: 16 },
-  { name: "Fitness", count: 22 },
-  { name: "Events", count: 21 },
-  { name: "Other", count: 17 },
+  { name: "Villa", count: 43 },
+  { name: "Cabin", count: 16 },
 ];
 
 const Listings = () => {
   const queryResult = useListings();
-  const { isLoading, isError, data = [] } = queryResult;
 
+  const { isLoading, isError, data = [] } = queryResult;
+  const [view, setView] = useState("grid");
   const {
     state: { filter },
   } = useStore();
 
   const { toggle, isSaved } = useFavorites();
 
-  const [selectedCategory, setSelectedCategory] = useState("Coaching");
-
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [location, setLocation] = useState("");
   const filteredListings = useMemo(() => {
     const normalized = filter.trim().toLowerCase();
 
@@ -60,74 +73,177 @@ const Listings = () => {
 
   return (
     <div className="bg-[#f8f8f8] min-h-screen mt-20">
-      <div className="max-w-[1280px] mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-10">
-          {/* LEFT SIDEBAR */}
-          <aside className="bg-white rounded-[10px] border border-[#ececec] p-8 h-fit sticky top-6 self-start">
-            {/* PRICE FILTER */}
-            <div className="pb-10 border-b border-[#ededed]">
-              <h2 className="text-[34px] font-semibold text-center text-[#222]">
-                Price Filter
-              </h2>
+      {/* Search Bar */}
+      <div className="w-full px-40 relative">
+        <div className="bg-white rounded-[50px] shadow-2xl p-3 flex flex-col sm:flex-row gap-2 sm:gap-0 items-stretch sm:items-center">
+          {/* Category Button */}
+          <div className="relative shrink-0">
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="flex items-center gap-2 bg-[#f84525] text-white px-6 py-4 rounded-[32px] text-sm font-medium whitespace-nowrap hover:bg-[#e03e1f] transition-colors min-w-[160px] justify-between"
+              style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
+            >
+              <span>{selectedCategory}</span>
+              <ChevronDown size={14} />
+            </button>
 
-              <p className="text-sm text-[#777] text-center py-4 mb-8">
-                Select min and max price range
-              </p>
+            {showDropdown && (
+              <div className="absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-xl py-2 z-50 min-w-[200px] border border-gray-100">
+                {searchCategories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setShowDropdown(false);
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#f84525]/10 hover:text-[#f84525] transition-colors"
+                    style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-              <div className="px-2">
-                <Slider
-                  defaultValue={[30, 70]}
-                  max={100}
-                  step={1}
-                  className="mb-8"
-                />
+          {/* Divider */}
+          <div className="hidden sm:block w-px h-10 bg-gray-200 mx-2 shrink-0" />
 
-                <div className="flex justify-between">
-                  <span className="bg-[#222] text-white text-xs px-3 py-1 rounded">
-                    $500
-                  </span>
+          {/* Location field */}
+          <div className="flex items-center gap-3 flex-1 px-4">
+            <MapPin size={20} className="text-gray-400 shrink-0" />
+            <input
+              type="text"
+              placeholder="What are you looking for?"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="flex-1 outline-none text-gray-700 text-sm bg-transparent placeholder-gray-400"
+              style={{ fontFamily: "'Wix Madefor Display', sans-serif" }}
+            />
+          </div>
 
-                  <span className="bg-[#222] text-white text-xs px-3 py-1 rounded">
-                    000 $3
-                  </span>
+          {/* Search Button */}
+          <button className="bg-[#f84525] hover:bg-[#e03e1f] text-white p-4 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#f84525]/30 sm:ml-2 shrink-0">
+            <Search size={20} />
+          </button>
+        </div>
+      </div>
+      <div className="w-full max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 pyd-6 sm:pyd-10">
+        <div className="flex flex-col lg:grid lg:grid-cols-[320px_1fr] gap-8 lg:gap-10">
+          {/* SIDEBAR */}
+          <aside className="w-full mt-12">
+            {/* MOBILE / TABLET */}
+            <div className="lg:hidden overflow-x-auto pb-2">
+              <div className="flex gap-4 min-w-max">
+                {/* PRICE FILTER */}
+                <div className="bg-white rounded-2xl border border-[#ececec] p-5 min-w-[280px]">
+                  <h2 className="text-xl font-semibold text-[#222] mb-4">
+                    Price Filter
+                  </h2>
 
-                  <span className="bg-[#e5e5e5] text-[#666] text-xs px-3 py-1 rounded">
-                    000 $5
-                  </span>
+                  <Slider
+                    defaultValue={[30, 70]}
+                    max={100}
+                    step={1}
+                    className="mb-5"
+                  />
+
+                  <div className="flex justify-between text-xs">
+                    <span className="bg-[#222] text-white px-2 py-1 rounded">
+                      $500
+                    </span>
+
+                    <span className="bg-[#222] text-white px-2 py-1 rounded">
+                      $3000
+                    </span>
+
+                    <span className="bg-[#e5e5e5] text-[#666] px-2 py-1 rounded">
+                      $5000
+                    </span>
+                  </div>
+                </div>
+
+                {/* CATEGORIES */}
+                <div className="bg-white rounded-2xl border border-[#ececec] p-5 min-w-[320px]">
+                  <h2 className="text-xl font-semibold text-[#222] mb-5">
+                    Categories
+                  </h2>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {categories.map((category) => (
+                      <label
+                        key={category.name}
+                        className="flex items-center justify-between gap-3 cursor-pointer"
+                      >
+                        <span className="text-sm text-[#444] whitespace-nowrap">
+                          {category.name}
+                        </span>
+
+                        <input
+                          type="radio"
+                          checked={selectedCategory === category.name}
+                          onChange={() => setSelectedCategory(category.name)}
+                          className="accent-[#FF5A5F]"
+                        />
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* CATEGORIES */}
-            <div className="py-10 border-b border-[#ededed]">
-              <h2 className="text-[34px] font-semibold text-center text-[#222]">
-                Categories
-              </h2>
+            {/* DESKTOP */}
+            <div className="hidden lg:block bg-white rounded-[10px] border border-[#ececec] p-8 h-fit sticky top-6">
+              {/* PRICE FILTER */}
+              <div className="pb-10 border-b border-[#ededed]">
+                <h2 className="text-[34px] font-semibold text-center text-[#222]">
+                  Price Filter
+                </h2>
 
-              <p className="text-sm text-[#777] text-center leading-7 mt-2 mb-8">
-                Duis a leo sit amet odio volutpat auctor ut a lorem
-              </p>
+                <p className="text-sm text-[#777] text-center py-4 mb-8">
+                  Select min and max price range
+                </p>
 
-              <div className="space-y-5">
-                {categories.map((category) => (
-                  <label
-                    key={category.name}
-                    className="flex items-center justify-between cursor-pointer group"
-                  >
-                    <div className="flex items-center gap-3">
+                <div className="px-2">
+                  <Slider
+                    defaultValue={[30, 70]}
+                    max={100}
+                    step={1}
+                    className="mb-8"
+                  />
+
+                  <div className="flex justify-between">
+                    <span className="bg-[#222] text-white text-xs px-3 py-1 rounded">
+                      $500
+                    </span>
+
+                    <span className="bg-[#222] text-white text-xs px-3 py-1 rounded">
+                      $3000
+                    </span>
+
+                    <span className="bg-[#e5e5e5] text-[#666] text-xs px-3 py-1 rounded">
+                      $5000
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CATEGORIES */}
+              <div className="py-10 border-b border-[#ededed]">
+                <h2 className="text-[34px] font-semibold text-center text-[#222]">
+                  Categories
+                </h2>
+
+                <div className="space-y-5">
+                  {categories.map((category) => (
+                    <label
+                      key={category.name}
+                      className="flex items-center justify-between cursor-pointer group"
+                    >
                       <span className="text-[17px] text-[#444] group-hover:text-[#FF5A5F] transition">
                         {category.name}
                         <span className="text-[#999]">({category.count})</span>
                       </span>
-                    </div>
-
-                    <div className="relative">
-                      <input
-                        type="radio"
-                        checked={selectedCategory === category.name}
-                        onChange={() => setSelectedCategory(category.name)}
-                        className="sr-only"
-                      />
 
                       <div
                         className={`w-5 h-5 rounded-md border transition flex items-center justify-center ${
@@ -140,72 +256,54 @@ const Listings = () => {
                           <span className="text-white text-[10px]">✓</span>
                         )}
                       </div>
-                    </div>
-                  </label>
-                ))}
+
+                      <input
+                        type="radio"
+                        checked={selectedCategory === category.name}
+                        onChange={() => setSelectedCategory(category.name)}
+                        className="hidden"
+                      />
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
-
-            {/* ORDER */}
-            <div className="py-10">
-              <h2 className="text-[34px] font-semibold text-center text-[#222]">
-                Order by
-              </h2>
-
-              <p className="text-sm text-[#777] text-center leading-7 mt-2 mb-8">
-                Duis a leo sit amet odio volutpat auctor ut a lorem
-              </p>
-
-              <button className="w-full h-14 border border-[#ececec] rounded-xl flex items-center justify-between px-5 text-[#777]">
-                <ChevronDown size={18} />
-                Latest
-              </button>
-
-              <Button className="w-full h-14 mt-10 rounded-xl bg-[#FF5A5F] hover:bg-[#ff494f] text-white text-base font-semibold shadow-none">
-                Apply filters
-              </Button>
-
-              <button className="w-full mt-5 flex items-center justify-center gap-2 text-[#777] hover:text-black transition">
-                Clear filters
-                <RotateCcw size={15} />
-              </button>
             </div>
           </aside>
 
           {/* RIGHT CONTENT */}
-          <section>
+          <section className="min-w-0">
             {/* TOPBAR */}
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <button className="w-11 h-11 rounded-lg border border-[#e5e5e5] bg-white flex items-center justify-center text-[#444]">
-                  <List size={18} />
-                </button>
+            <div className="flex items-center right-0 mb-1 gap-4 justify-end">
+              <button className={`p-2 flex gap-2 rounded`}>
+                <List
+                  onClick={() => setView("list")}
+                  size={35}
+                  className={`hover:bg-gray-100 p-2 rounded-md ${view === "grid" ? "text-primary" : "bg-orange-50 text-orange-500"}`}
+                />
 
-                <button className="w-11 h-11 rounded-lg border border-[#e5e5e5] bg-white flex items-center justify-center text-[#444]">
-                  <LayoutGrid size={18} />
-                </button>
-              </div>
-
-              <h2 className="text-[20px] font-medium text-[#333]">
-                All{" "}
-                <span className="font-bold">
-                  {filteredListings.length.toLocaleString()}
-                </span>{" "}
-                listing found
-              </h2>
+                <Grid2X2
+                  onClick={() => setView("grid")}
+                  size={35}
+                  className={`hover:bg-gray-100 p-2 rounded-md ${view === "list" ? "text-primary" : "bg-orange-50 text-orange-500"}`}
+                />
+              </button>
             </div>
 
             {/* LISTINGS */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-              {filteredListings.map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  saved={isSaved(listing.id)}
-                  onToggleSave={() => toggle(listing.id, listing.title)}
-                />
-              ))}
-            </div>
+            {view === "grid" && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-5 sm:gap-7">
+                {filteredListings.map((listing) => (
+                  <ListingsCard
+                    key={listing.id}
+                    listing={listing}
+                    saved={isSaved(listing.id)}
+                    onToggleSave={() => toggle(listing.id, listing.title)}
+                   
+                  />
+                ))}
+              </div>
+            )}
+            {view === "list" && <ListingTable listingData={filteredListings} />}
           </section>
         </div>
       </div>

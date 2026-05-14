@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<UserProfile>;
   register: (data: any) => Promise<void>;
   logout: () => void;
+  updateUser: (data: Partial<UserProfile>) => Promise<UserProfile>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -105,12 +106,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsAuthenticated(false);
     setUser(null);
     sessionStorage.removeItem("booking_intent_listing");
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
+  };
+
+  const updateUser = async (data: Partial<UserProfile>) => {
+    try {
+      const response = await axiosInstance.patch("/auth/profile", data);
+      setUser(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Update user failed:", error);
+      throw error;
+    }
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, login, register, logout }}
+      value={{ isAuthenticated, user, login, register, logout, updateUser }}
     >
       {children}
     </AuthContext.Provider>
