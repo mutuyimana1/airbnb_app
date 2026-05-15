@@ -149,7 +149,7 @@ console.log(user,"user")
 onConfirm={(reason) =>
                             cancelBooking({
                               bookingId: booking.id,
-                              reason: reason || "",
+                              // reason: reason || "",
                             })
                           }
                          isLoading={isCancelling}
