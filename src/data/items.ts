@@ -2,6 +2,7 @@ export const navItems = [
   { name: "Home", hasDropdown: false ,page:"/"},
   { name: "Listing", hasDropdown: false ,page:"/listings"},
   { name: "Bookings", hasDropdown: false ,page:"/bookings",roles:["GUEST"]},
+  { name: "Dashboard", hasDropdown: false ,page:"/dashboard",roles:["HOST","ADMIN"]},
 ];
 export const places = [
   {

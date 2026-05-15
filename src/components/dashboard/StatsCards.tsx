@@ -23,7 +23,7 @@ const stats = [
   },
   {
     id: '3',
-    label: 'Total Orders',
+    label: 'Total Bookings',
     value: '1,428',
     change: -3.1,
     trend: 'down' as const,
@@ -33,7 +33,7 @@ const stats = [
   },
   {
     id: '4',
-    label: 'Products',
+    label: 'Properties',
     value: '256',
     change: 5.7,
     trend: 'up' as const,

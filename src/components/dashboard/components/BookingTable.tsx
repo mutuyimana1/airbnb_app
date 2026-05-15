@@ -2,6 +2,7 @@ import { MapPin, Users, CheckCircle, Clock, XCircle } from "lucide-react";
 import type { Booking } from "@/types";
 import { useBookingActions } from "@/features/bookings/hooks/useBookingActions";
 import { DialogConfirm } from "@/components/modals/DialogConfirm";
+import { useAuth } from "@/components/features/auth/hooks/useAuth";
 
 interface BookingsTableProps {
   bookings: Booking[];
@@ -36,7 +37,8 @@ const statusConfig = {
 
  const BookingsTable = ({ bookings }: BookingsTableProps) => {
   const { confirmBooking, cancelBooking, isConfirming, isCancelling } = useBookingActions();
-
+const {user} = useAuth();
+console.log(user,"user")
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return "—";
     return new Date(dateStr).toLocaleDateString("en-US", {
@@ -77,9 +79,9 @@ const statusConfig = {
             <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
               Total
             </th>
-            <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
+          {user &&user.role !== "GUEST" &&  <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
               Actions
-            </th>
+            </th>}
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -129,7 +131,7 @@ const statusConfig = {
                     ${booking.totalPrice?.toFixed(2) || "0.00"}
                   </p>
                 </td>
-                <td className="px-6 py-4 text-right flex gap-2 items-center justify-end">
+              {user &&user.role !== "GUEST" &&  <td className="px-6 py-4 text-right flex gap-2 items-center justify-end">
                   {booking.status?.toUpperCase() === "PENDING" && (
 <DialogConfirm
                        openText="Confirm"
@@ -155,7 +157,7 @@ onConfirm={(reason) =>
                          requireReason={true}
                        />
                     )}
-                </td>
+                </td>}
               </tr>
             );
           })}

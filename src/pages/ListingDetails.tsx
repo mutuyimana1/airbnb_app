@@ -28,7 +28,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
+import defaultImage from "../assets/images/90219fa30ce211f3bdb2f2c69f62ce40056e8ef4 copy.png"
 import { BookingForm } from "@/features/bookings";
 
 type RouteParams = {
@@ -47,7 +47,7 @@ export default function ExactListingPage() {
     listing?.photos?.map((photo) => photo.url).filter(Boolean) ?? [];
 
   const primaryImage =
-    photoUrls[0] || "https://via.placeholder.com/1200x720?text=No+image";
+    photoUrls[0] || defaultImage;
 
   const secondaryImage = photoUrls[1] || primaryImage;
 

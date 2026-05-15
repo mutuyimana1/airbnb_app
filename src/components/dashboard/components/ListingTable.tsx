@@ -1,6 +1,6 @@
 import { MoreVertical } from 'lucide-react';
 import type { Listing } from '@/types';
-
+import defaultImage from "../../../assets/images/90219fa30ce211f3bdb2f2c69f62ce40056e8ef4 copy.png"
 
 export default function ListingTable({ listingData }: { listingData?: Listing[] }) {
 
@@ -35,7 +35,7 @@ export default function ListingTable({ listingData }: { listingData?: Listing[] 
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-3">
                     <img
-                      src={row.photos?.[0]?.url || row.img || "https://via.placeholder.com/640x360?text=No+image"}
+                      src={row.photos?.[0]?.url || row.img || defaultImage}
                       alt={row.title}
                       className="w-10 h-10 rounded-full object-cover"
                     />
