@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import {
   Heart,
-  Search,
   Home,
   UtensilsCrossed,
   Gamepad2,
@@ -11,21 +10,11 @@ import {
   Star,
 } from "lucide-react";
 import { useListings } from "@/features/listings/hooks/useListings";
-import { useFavorites } from "@/features/listings/hooks/useFavorites";
-import { useToggleSaved } from "@/features/listings/hooks/useToggleSaved";
 import defaultImage from "../assets/images/90219fa30ce211f3bdb2f2c69f62ce40056e8ef4 copy.png"
-type PlaceCard = {
-  id: number | string;
-  title: string;
-  image: string;
-  icon: React.ReactNode;
-};
 
 const DiscoverPlacesSection: React.FC = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const { data: listings, isLoading, isError } = useListings();
-  const { toggle } = useFavorites();
-  const { mutate: toggleSaveApi } = useToggleSaved();
 
   // Limit to 10 listings
   const limitedListings = listings?.slice(0, 10) || [];

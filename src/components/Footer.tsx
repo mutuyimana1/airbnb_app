@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   MapPin,
   Phone,
   Mail,
   ArrowRight,
-  Send,
 } from "lucide-react";
 import { FaFacebook } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
-import { logoWhite, mobileApp } from "../assets/images";
+import { logoWhite } from "../assets/images";
 import { footerLinks } from "../data/travelData";
 import { NavLink } from "react-router-dom";
 
 export function Footer() {
-  const [email, setEmail] = useState("");
 
   return (
     <footer className="bg-[#191e25] text-white">

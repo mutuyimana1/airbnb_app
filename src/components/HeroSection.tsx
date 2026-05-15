@@ -1,21 +1,7 @@
-import { useState } from "react";
-import { Search, MapPin, ChevronDown } from "lucide-react";
 import { heroBg } from "../assets/images";
 
-const searchCategories = [
-  "All Categories",
-  "Hotels",
-  "Restaurants",
-  "Shopping",
-  "Entertainment",
-  "Gymnasiums",
-];
 
 export function HeroSection() {
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [location, setLocation] = useState("");
-
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image */}
