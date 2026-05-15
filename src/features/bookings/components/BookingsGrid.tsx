@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Users, CheckCircle, Clock, XCircle } from "lucide-react";
+import { MapPin, Users, CheckCircle, Clock, XCircle } from "lucide-react";
 import type { Booking } from "@/types";
 
 interface BookingCardProps {

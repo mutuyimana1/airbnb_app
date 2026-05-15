@@ -8,11 +8,11 @@ import { navItems } from "@/data/items";
 export function Navbar() {
    const location = useLocation();
    const navigate = useNavigate();
-   const { isAuthenticated, logout, user } = useAuth();
+    const { isAuthenticated, logout } = useAuth();
    const { count: savedCount } = useFavorites();
    const [mobileOpen, setMobileOpen] = useState(false);
-   const [scrolled, setScrolled] = useState(false);
-   const [anchorEl, setAnchorEl] = useState(null);
+    const [scrolled, setScrolled] = useState(false);
+    const [_anchorEl, setAnchorEl] = useState(null);
 
   const handleLogout = () => {
     logout();

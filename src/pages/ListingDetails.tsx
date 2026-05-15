@@ -4,7 +4,7 @@ interface Amenity {
   icon: React.ReactNode;
 }
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useListing } from "@/features/listings/hooks/useListing";
 import {
@@ -12,7 +12,6 @@ import {
   Grid,
   Heart,
   ExternalLink,
-  Clock3,
   Tv,
   Waves,
   UtensilsCrossed,

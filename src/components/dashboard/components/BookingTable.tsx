@@ -146,7 +146,7 @@ console.log(user,"user")
 <DialogConfirm
                          openText="Cancel"
                          headerText={`You are going to cancel booking of ${booking.listing?.title}`}
-onConfirm={(reason) =>
+ onConfirm={(_reason: unknown) =>
                             cancelBooking({
                               bookingId: booking.id,
                               // reason: reason || "",

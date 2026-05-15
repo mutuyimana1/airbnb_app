@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children, forbiddenRoles = [] }: ProtectedRouteProps) 
   }
 
   const userRole = user?.role?.toUpperCase();
-  if (forbiddenRoles.length > 0 && forbiddenRoles.includes(userRole)) {
+  if (forbiddenRoles.length > 0 && forbiddenRoles.includes(userRole!)) {
     return <Navigate to="/" replace />;
   }
 

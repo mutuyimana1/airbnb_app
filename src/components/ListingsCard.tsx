@@ -1,9 +1,7 @@
 // components/ListingsCard.tsx
 
-import { Gamepad2, Heart, Home, MapPin, Phone, Scissors, Star, Store, UtensilsCrossed } from "lucide-react";
+import { Gamepad2, Heart, Home, Scissors, Star, UtensilsCrossed } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useFavorites } from "@/features/listings/hooks/useFavorites";
-import { useToggleSaved } from "@/features/listings/hooks/useToggleSaved";
 import defaultImage from "../assets/images/90219fa30ce211f3bdb2f2c69f62ce40056e8ef4 copy.png"
 import type { Listing } from "@/types";
 interface ListingCardProps {

@@ -7,7 +7,6 @@ import {
   MapPin,
 } from "lucide-react";
 
-import { Slider } from "@/components/ui/slider";
 import { useStore } from "@/store/StoreContext";
 import { useSavedListings } from "@/features/listings/hooks/useSavedListings";
 import Spinner from "@/shared/components/Spinner";

@@ -38,8 +38,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     delete axiosInstance.defaults.headers.common["Authorization"];
   };
 
-  const getDefaultRedirect = (role?: string) =>
-    role?.toUpperCase() === "GUEST" ? "/listings" : "/dashboard";
+  /* _getDefaultRedirect removed — unused */
 
   const fetchUserProfile = async () => {
     const response = await axiosInstance.get<UserProfile>("/auth/profile");

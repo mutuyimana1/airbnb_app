@@ -139,7 +139,7 @@ export const AddListingModal = ({
 
       return { successfulUploads, failedUploads };
     },
-    onSuccess: (result) => {
+    onSuccess: (_result) => {
       // Always close modal since listing was created, even if some photos failed
       handleClose();
       queryClient.invalidateQueries({ queryKey: ["listings"] });

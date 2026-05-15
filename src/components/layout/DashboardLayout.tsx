@@ -1,18 +1,11 @@
-import { Outlet, Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/components/features/auth/hooks/useAuth";
+import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Sidebar from "../dashboard/Sidebar";
 import DashboardHeader from "../dashboard/DashboardHeader";
 
 const DashboardLayout = () => {
-  const { logout, user } = useAuth();
-  const navigate = useNavigate();
- const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   return (
     <div className="min-h-screen flex bg-slate-50-50 w-full">

@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios";
-import { cn } from "@/lib/utils";
 import type { Listing } from "@/types";
 import { useState, useEffect } from "react";
 import { Grid2X2, List, Plus } from "lucide-react";

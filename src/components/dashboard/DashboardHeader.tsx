@@ -1,7 +1,6 @@
 import { Search, Bell, Menu} from "lucide-react";
 import { useAuth } from "../features/auth/hooks/useAuth";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ProfileEditModal } from "./ProfileEditModal";
 
 interface DashboardHeaderProps {
@@ -10,8 +9,6 @@ interface DashboardHeaderProps {
 
 export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const userRole = user?.role?.toUpperCase() === "HOST" ? "HOST" : "GUEST";
   const userName = user?.name || "Traveler";
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -24,10 +21,6 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
   const handleEditProfile = () => {
     setIsProfileModalOpen(true);
-    setAnchorEl(null);
-  };
-
-  const handleCloseDropdown = () => {
     setAnchorEl(null);
   };
 

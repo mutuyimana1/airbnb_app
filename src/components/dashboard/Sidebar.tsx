@@ -1,5 +1,5 @@
 import { LayoutDashboard, ShoppingCart, Users, Package, Settings, FileText, BarChart3, Bell, ChevronLeft, ChevronRight } from 'lucide-react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const menuItems = [
   { id: '1', label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
@@ -18,9 +18,6 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
-  const location = useLocation();
-  const pathname = location.pathname;
-
   return (
     <aside
       className={`hidden lg:flex lg:flex-col bg-white border-r border-gray-200 fixed left-0 top-0 bottom-0 z-40 transition-all duration-300 ${
